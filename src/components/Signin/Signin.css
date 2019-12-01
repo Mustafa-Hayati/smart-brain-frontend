@@ -1,0 +1,4 @@
+.hover-bg-black:focus,
+.hover-bg-black:hover {
+  background-color: transparent !important;
+}

@@ -8,6 +8,8 @@ import Particles from "react-particles-js";
 import API_KEY from "../CLARIFAI_API_KEY";
 import Clarifai from "clarifai";
 import FaceRecognition from "../components/FaceRecognition/FaceRecognition";
+import Signin from "../components/Signin/Signin";
+import Register from "../components/Register/Register";
 
 const app = new Clarifai.App({
   apiKey: API_KEY
@@ -29,7 +31,9 @@ class App extends Component {
   state = {
     input: "",
     imageUrl: "",
-    boxes: []
+    boxes: [],
+    route: "signin",
+    isSignedIn: false
   };
 
   calculateFaceLocation = data => {
@@ -81,21 +85,43 @@ class App extends Component {
       });
   };
 
+  onRouteChange = route => {
+    if (route === "signout") {
+      this.setState({ isSignedIn: false });
+    } else if (route === "home") {
+      this.setState({ isSignedIn: true });
+    }
+    this.setState({ route });
+  };
+
   render() {
+    const { isSignedIn, route, boxes, imageUrl } = this.state;
     return (
       <div className="App">
         <Particles params={particlesOptions} className="particles" />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange}
-          onButtonSubmit={this.onButtonSubmit}
+        <Navigation
+          isSignedIn={isSignedIn}
+          onRouteChange={this.onRouteChange}
         />
-        <FaceRecognition
-          boxes={this.state.boxes}
-          imageUrl={this.state.imageUrl}
-        />
+        {route === "signin" ||
+        route === "register" ||
+        route === "signout" ? (
+          route === "register" ? (
+            <Register onRouteChange={this.onRouteChange} />
+          ) : (
+            <Signin onRouteChange={this.onRouteChange} />
+          )
+        ) : (
+          <div>
+            <Logo />
+            <Rank />
+            <ImageLinkForm
+              onInputChange={this.onInputChange}
+              onButtonSubmit={this.onButtonSubmit}
+            />
+            <FaceRecognition boxes={boxes} imageUrl={imageUrl} />
+          </div>
+        )}
       </div>
     );
   }
