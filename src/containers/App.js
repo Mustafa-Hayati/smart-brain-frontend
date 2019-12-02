@@ -131,12 +131,18 @@ class App extends Component {
               loadUser={this.loadUser}
             />
           ) : (
-            <Signin onRouteChange={this.onRouteChange} />
+            <Signin
+              loadUser={this.loadUser}
+              onRouteChange={this.onRouteChange}
+            />
           )
         ) : (
           <div>
             <Logo />
-            <Rank />
+            <Rank
+              name={this.state.user.name}
+              entries={this.state.user.entries}
+            />
             <ImageLinkForm
               onInputChange={this.onInputChange}
               onButtonSubmit={this.onButtonSubmit}
