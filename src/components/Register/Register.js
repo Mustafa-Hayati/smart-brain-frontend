@@ -26,15 +26,19 @@ class Register extends Component {
   };
 
   onSubmitRegister = () => {
+    const { email, password, name } = this.state;
+    if (!email.length || !password.length || !name.length) {
+      return;
+    }
     fetch("http://127.0.0.1:8080/register", {
       method: "post",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-        name: this.state.name
+        email,
+        password,
+        name
       })
     })
       .then(response => response.json())

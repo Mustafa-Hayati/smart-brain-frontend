@@ -21,14 +21,18 @@ class Signin extends Component {
   };
 
   onSubmitSignIn = () => {
+    const { signInEmail, signInPassword } = this.state;
+    if (!signInEmail.length || !signInPassword) {
+      return;
+    }
     fetch("http://127.0.0.1:8080/signin", {
       method: "post",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        email: this.state.signInEmail,
-        password: this.state.signInPassword
+        email: signInEmail,
+        password: signInPassword
       })
     })
       .then(response => response.json())
