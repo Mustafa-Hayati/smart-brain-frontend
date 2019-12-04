@@ -27,6 +27,21 @@ const particlesOptions = {
   }
 };
 
+const initialState = {
+  input: "",
+  imageUrl: "",
+  boxes: [],
+  route: "signin",
+  isSignedIn: false,
+  user: {
+    id: "",
+    name: "",
+    email: "",
+    entries: 0,
+    joined: ""
+  }
+};
+
 class App extends Component {
   state = {
     input: "",
@@ -60,8 +75,6 @@ class App extends Component {
     const faces = allRegions.map(
       region => region.region_info.bounding_box
     );
-    // const clarifaiFace =
-    //   data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("inputImage");
     const width = Number(image.width);
     const height = Number(image.height);
@@ -74,12 +87,6 @@ class App extends Component {
       };
     });
     return boxes;
-    // return {
-    //   leftCol: clarifaiFace.left_col * width,
-    //   topRow: clarifaiFace.top_row * height,
-    //   rightCol: width - clarifaiFace.right_col * width,
-    //   bottomRow: height - clarifaiFace.bottom_row * height
-    // };
   };
 
   displayFaceBox = boxes => {
@@ -112,7 +119,8 @@ class App extends Component {
               this.setState(
                 Object.assign(this.state.user, { entries: count })
               );
-            });
+            })
+            .catch(console.log);
         }
         this.displayFaceBox(this.calculateFaceLocation(response));
       })
@@ -123,7 +131,7 @@ class App extends Component {
 
   onRouteChange = route => {
     if (route === "signout") {
-      this.setState({ isSignedIn: false, imageUrl: "" });
+      this.setState(initialState);
     } else if (route === "home") {
       this.setState({ isSignedIn: true });
     }
